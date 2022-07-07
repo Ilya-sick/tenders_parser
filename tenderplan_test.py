@@ -108,3 +108,4 @@ def main(month, year):
 """На вход принимаются 2 аргумента: месяц, год."""
 
 main(int(sys.argv[1]), int(sys.argv[2]))
+
