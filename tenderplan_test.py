@@ -20,8 +20,6 @@ HEADERS = {
 def get_tenders(url, headers, params=''):
     response = requests.get(url, headers=headers, params=params)
     if response.ok:
-        # with open("response.html", "a", encoding='utf-8') as file:
-        #     file.write(response.text)
         return response
     else:
         print(f"ERROR: {response.status_code}")
@@ -31,12 +29,12 @@ def get_tenders(url, headers, params=''):
 
 def get_content(month, year, total_pages):
     save_json = []
+    
     for page in range(total_pages):
         params_with_date = get_params(month, year, page)
         current_tenders = get_tenders(URL, HEADERS, params_with_date).text
         json_dict = json.loads(current_tenders)
-        # with open("tenders.json", "a", encoding='utf-8') as file:
-        #     file.write(current_tenders)
+
         for item in json_dict['data']: 
             all_tenders = {}
             
@@ -65,8 +63,6 @@ def get_content(month, year, total_pages):
             for attachments in item['attributeCategories'][0]['attributes']:
                 if ('code', 'tenders_attachments') in attachments.items():
                     all_tenders['tenders_attachments'] = attachments['value']
-            
-            # new_json = json.dumps(all_tenders, indent=4, ensure_ascii=False)
         
             save_json.append(all_tenders)
                 
@@ -99,7 +95,8 @@ def main(month, year):
     params = get_params(month, year)
     info_json_dict = get_tenders(URL, HEADERS, params)
     amount_pages = info_json_dict.json()["totalPages"]
-    print(f"Всего страниц: {amount_pages}")
+    amount_items = info_json_dict.json()["totalItems"]
+    print(f"Всего страниц: {amount_pages}\nВсего тендеров: {amount_items}")
     get_content(month, year, amount_pages)
     fin_time = datetime.datetime.now()
     print(fin_time - start_time)
