@@ -1,4 +1,4 @@
-# tenderplan_test
+# tenders_parser
 
 import requests
 import calendar
